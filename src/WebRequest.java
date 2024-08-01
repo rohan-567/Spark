@@ -12,8 +12,8 @@ import java.net.URLEncoder;
 
 public class WebRequest {
 
-    private final String weatherKey = "&apikey=ClwhuEl1QAvRGyVnOFd1dH63ixsvRisX";
-    private final String locationKey = "a0b5f058d24b41d3b58d563515c32815";
+    private final String weatherKey = "key";
+    private final String locationKey = "key";
 
 
 
