@@ -40,32 +40,7 @@ public class WeatherState {
     }
 
     public String makeImmediateRecommendation(){
-        HashMap<Integer, String> weatherCodes = new HashMap<>();
-        weatherCodes.put(0, "Unknown");
-        weatherCodes.put(1000, "Clear, Sunny");
-        weatherCodes.put(1100, "Mostly Clear");
-        weatherCodes.put(1101, "Partly Cloudy");
-        weatherCodes.put(1102, "Mostly Cloudy");
-        weatherCodes.put(1001, "Cloudy");
-        weatherCodes.put(2000, "Fog");
-        weatherCodes.put(2100, "Light Fog");
-        weatherCodes.put(4000, "Drizzle");
-        weatherCodes.put(4001, "Rain");
-        weatherCodes.put(4200, "Light Rain");
-        weatherCodes.put(4201, "Heavy Rain");
-        weatherCodes.put(5000, "Snow");
-        weatherCodes.put(5001, "Flurries");
-        weatherCodes.put(5100, "Light Snow");
-        weatherCodes.put(5101, "Heavy Snow");
-        weatherCodes.put(6000, "Freezing Drizzle");
-        weatherCodes.put(6001, "Freezing Rain");
-        weatherCodes.put(6200, "Light Freezing Rain");
-        weatherCodes.put(6201, "Heavy Freezing Rain");
-        weatherCodes.put(7000, "Ice Pellets");
-        weatherCodes.put(7101, "Heavy Ice Pellets");
-        weatherCodes.put(7102, "Light Ice Pellets");
-        weatherCodes.put(8000, "Thunderstorm");
-
+        HashMap<Integer, String> weatherCodes = getIntegerStringHashMap();
 
 
         String clothing;
@@ -134,11 +109,34 @@ public class WeatherState {
 
     }
 
-
-
-
-
-
+    private static HashMap<Integer, String> getIntegerStringHashMap() {
+        HashMap<Integer, String> weatherCodes = new HashMap<>();
+        weatherCodes.put(0, "Unknown");
+        weatherCodes.put(1000, "Clear, Sunny");
+        weatherCodes.put(1100, "Mostly Clear");
+        weatherCodes.put(1101, "Partly Cloudy");
+        weatherCodes.put(1102, "Mostly Cloudy");
+        weatherCodes.put(1001, "Cloudy");
+        weatherCodes.put(2000, "Fog");
+        weatherCodes.put(2100, "Light Fog");
+        weatherCodes.put(4000, "Drizzle");
+        weatherCodes.put(4001, "Rain");
+        weatherCodes.put(4200, "Light Rain");
+        weatherCodes.put(4201, "Heavy Rain");
+        weatherCodes.put(5000, "Snow");
+        weatherCodes.put(5001, "Flurries");
+        weatherCodes.put(5100, "Light Snow");
+        weatherCodes.put(5101, "Heavy Snow");
+        weatherCodes.put(6000, "Freezing Drizzle");
+        weatherCodes.put(6001, "Freezing Rain");
+        weatherCodes.put(6200, "Light Freezing Rain");
+        weatherCodes.put(6201, "Heavy Freezing Rain");
+        weatherCodes.put(7000, "Ice Pellets");
+        weatherCodes.put(7101, "Heavy Ice Pellets");
+        weatherCodes.put(7102, "Light Ice Pellets");
+        weatherCodes.put(8000, "Thunderstorm");
+        return weatherCodes;
+    }
 
 
 }

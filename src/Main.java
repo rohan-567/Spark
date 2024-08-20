@@ -1,12 +1,9 @@
 import java.io.*;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.*;
 
 
@@ -14,17 +11,72 @@ import java.util.*;
 import org.json.*;
 
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
+
 
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {
 
+        String filePath = "/Users/rohan/IdeaProjects/Spark/src/apiKeys.json";
+        String apiKeys = new String(Files.readAllBytes(Paths.get(filePath)));
+
+        JSONObject keys = new JSONObject();
+
+        try {
+            keys = new JSONObject(apiKeys);
+        } catch (Exception e){
+
+        }
+
+
+
+        Scanner sc = new Scanner(System.in);
+
+        if (apiKeys.isEmpty()){
+            System.out.println("It seems that the app doesn't have any api keys. Please add them.");
+            System.out.println("Enter the apikey for the location service:");
+            String locationKey = sc.next();
+            System.out.println("Enter the apikey for the weather service:");
+            String weatherKey = sc.next();
+            keys.put("locationKey", locationKey);
+            keys.put("weatherKey", "&apikey="  +weatherKey);
+            File savedKeys = new File("/apiKeys.json");
+            Writer writer = new FileWriter(savedKeys);
+            keys.write(writer);
+
+
+        }
+
+
+
+
+
+
+
+
         WebRequest Request = new WebRequest();
+
+        Request.setLocationKey(keys.getString("locationKey"));
+        Request.setWeatherKey(keys.getString("weatherKey"));
+
+
+
+
+
+
         calendarYear year = new calendarYear();
         WeatherState weatherState = new WeatherState(new JSONObject(Request.getRealtimeWeather()));
 
-        Scanner sc = new Scanner(System.in);
+
+
+
+
+
+
+
+
+
+
 
         System.out.println("Launch App? Y/N");
         String answer = sc.next();
@@ -32,12 +84,24 @@ public class Main {
         boolean isAppRunning = answer.equals("Y");
 
         while (isAppRunning) {
-            System.out.println("What do you wish to do? Type \"w\" for weather information, \"c\" to show cafes and bakeries in your vicinity, \"d\" to list upcoming events and \"e\" to add new Events.");
+            System.out.println("What do you wish to do? Type \"w\" for weather information, \"c\" to show cafes and bakeries in your vicinity, \"d\" to list upcoming events , \"e\" to add new Events and \"a\" to edit the api keys"  );
             String ans = sc.next();
             if (!ans.equals("w") && !ans.equals("c") && !ans.equals("d") && !ans.equals("e")) {
                 System.out.println("Illegal input");
             }
             switch (ans) {
+                case "a" -> {
+                    System.out.println("Enter the apikey for the location service:");
+                    String locationKey = sc.next();
+                    System.out.println("Enter the apikey for the weather service:");
+                    String weatherKey = sc.next();
+                    keys.put("locationKey", locationKey);
+                    keys.put("weatherKey", weatherKey);
+                    File apiKeysFile = new File("/apiKeys.json");
+                    Writer writer = new FileWriter(apiKeysFile);
+                    keys.write(writer);
+                    writer.close();
+                }
                 case "w" -> System.out.println(weatherState.makeImmediateRecommendation());
                 case "c" -> System.out.println(Request.getAmenities());
                 case "d" -> {

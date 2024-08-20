@@ -12,8 +12,8 @@ import java.net.URLEncoder;
 
 public class WebRequest {
 
-    private String weatherKey;
-    private String locationKey;
+    private  String weatherKey;
+    private  String locationKey;
 
 
 
