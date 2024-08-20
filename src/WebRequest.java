@@ -16,9 +16,13 @@ public class WebRequest {
     private  String locationKey;
 
 
+    public void setWeatherKey(String weatherKey) {
+        this.weatherKey = weatherKey;
+    }
 
-
-
+    public void setLocationKey(String locationKey) {
+        this.locationKey = locationKey;
+    }
 
     public String makeRequest(String Address) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
