@@ -16,6 +16,7 @@ public class WebRequest {
     private  String locationKey;
 
 
+
     public void setWeatherKey(String weatherKey) {
         this.weatherKey = weatherKey;
     }
@@ -37,7 +38,9 @@ public class WebRequest {
     } //Makes an HTTP Request and expects a JSON format answer
 
     public String getLocation() throws IOException, InterruptedException{
+
         return makeRequest("https://api.ipgeolocation.io/ipgeo?apiKey=%s&output=json".formatted(locationKey));
+
 
 
 
@@ -59,7 +62,7 @@ public class WebRequest {
         JSONObject location = new JSONObject(getLocation());
         Double latitude = location.getDouble("latitude");
         Double longitude = location.getDouble("longitude");
-        int radius = 500;
+
 
         String query = String.format("""
             [out:json];
@@ -78,23 +81,23 @@ public class WebRequest {
 
         JSONArray amenities = amenityLst.getJSONArray("elements");
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (int i=0; i < amenities.length(); i++){
             JSONObject amenity = amenities.getJSONObject(i).getJSONObject("tags");
             if (amenity.has("amenity")){
                 String type = amenity.getString("amenity");
-                result += type.substring(0,1).toUpperCase() + type.substring(1);
+                result.append(type.substring(0, 1).toUpperCase()).append(type.substring(1));
             }
             if (amenity.has("shop")){
                 String type = amenity.getString("shop");
-                result += type.substring(0,1).toUpperCase() + type.substring(1);
+                result.append(type.substring(0, 1).toUpperCase()).append(type.substring(1));
             }
 
             try{
-            result += " " + amenity.getString("name") +"\n" ;}
+            result.append(" ").append(amenity.getString("name")).append("\n");}
             catch (Exception e){
-                result += " Unknown name \n";
+                result.append(" Unknown name \n");
             }
 
 
@@ -114,20 +117,20 @@ public class WebRequest {
                 address += amenity.getString("addr:postcode") + " ";
             }
 
-            result += address;
+            result.append(address);
 
             if (address.trim().isEmpty()){
-                result += "N/A";
+                result.append("N/A");
             }
 
 
 
 
 
-            result += "\n";
+            result.append("\n");
 
             if (amenity.has("payment:contactless")){
-                result += "Kartenzahlung:" + amenity.getString("payment:contactless") + "\n";
+                result.append("Kartenzahlung:").append(amenity.getString("payment:contactless")).append("\n");
 
             }
 
@@ -138,7 +141,7 @@ public class WebRequest {
 
 
 
-            result += "\n";
+            result.append("\n");
 
 
 
@@ -151,7 +154,7 @@ public class WebRequest {
 
 
 
-        return  result;
+        return result.toString();
 
 
 

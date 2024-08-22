@@ -1,16 +1,15 @@
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import java.io.*;
-import java.lang.reflect.Type;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Year;
 import java.util.*;
 
@@ -32,10 +31,10 @@ public class calendarYear {
         int j=0; // Index for daysWithEvents
 
         // Iterate over all calendarDays
-        for (int i=0; i<calendarDays.length; i++){
+        for (calendarDay calendarDay : calendarDays) {
             // If the current calendarDay has events, add it to daysWithEvents
-            if (!(calendarDays[i].getEvents().isEmpty())){
-                daysWithEvents.add(j,calendarDays[i]);
+            if (!(calendarDay.getEvents().isEmpty())) {
+                daysWithEvents.add(j, calendarDay);
                 j++;
             }
         }
@@ -110,32 +109,38 @@ public class calendarYear {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String dateString = simpleDateFormat.format(calendar.getTime());
 
-        File savedCalendarFile = new File("/Users/rohan/IdeaProjects/Spark_POC/src/savedCalendar.json");
+        File savedCalendarFile = new File("src/savedCalendar.json");
 
-        String filePath = "/Users/rohan/IdeaProjects/Spark_POC/src/savedCalendar.json";
+        String filePath = "src/savedCalendar.json";
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
         JSONObject objectsToStore = new JSONObject();
 
 
 
         try{objectsToStore = new JSONObject(content);}
-        catch (Exception e){}
+        catch (Exception ignored){}
 
         JSONArray events = new JSONArray();
-        Writer writer = new FileWriter(savedCalendarFile);
+
 
         if (objectsToStore.has(dateString)){
             events = objectsToStore.getJSONArray(dateString);
             objectsToStore.put(dateString,events.put(eventName));
-            objectsToStore.write(writer);
-            writer.close();
+            try (Writer writer = new FileWriter(savedCalendarFile, false)) {
+                objectsToStore.write(writer);
+            } catch (IOException ignored) {
+
+            }
             return;
 
         }
 
         objectsToStore.put(dateString,events.put(eventName));
-        objectsToStore.write(writer);
-        writer.close();
+        try (Writer writer = new FileWriter(savedCalendarFile, false)) {
+            objectsToStore.write(writer);
+        } catch (IOException ignored) {
+
+        }
 
         /*This takes a calendar and en event name and adds it to the json file pertaining to events. It even allows storage of events beyond the current year.
         If the json file already has the day you're trying to add to, it will update the event list. Otherwise, it will create a new entry.
@@ -155,10 +160,18 @@ public class calendarYear {
 
         // Path to the saved JSON file
 
-        String filePath = "/savedCalendar.json";
+        String filePath = "src/savedCalendar.json";
         // Read the content of the file
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
+
+
         // Parse the content into a JSON object
+
+
+        if (content.isEmpty()){
+            return;
+        }
+
         JSONObject objectsToStore = new JSONObject(content);
 
         // Iterate over the keys in the JSON object
@@ -171,7 +184,7 @@ public class calendarYear {
         while (keys.hasNext()){
             String next = keys.next();
 
-            // Check if the key contains the currentyear
+            // Check if the key contains the current year
             if(next.contains(Integer.toString(currentYear))){
 
                 // Get the event list for the current key
@@ -212,12 +225,18 @@ public class calendarYear {
      */
     public void removeOutdatedEvents() throws IOException, ParseException {
 
-        String filePath = "/savedCalendar.json";
+        String filePath = "src/savedCalendar.json";
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
+
+        if (content.isEmpty()){
+            return;
+        }
+
+
         JSONObject objectsToStore = new JSONObject(content);
 
         Iterator<String> keys = objectsToStore.keys();
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         List<String> keysToRemove = new ArrayList<>();
 
@@ -238,9 +257,13 @@ public class calendarYear {
 
         }
         // write the updated JSONObject to the file
-        File savedCalendarFile = new File("/Users/rohan/IdeaProjects/Spark_POC/src/savedCalendar.json");
-        Writer writer = new FileWriter(savedCalendarFile);
-        objectsToStore.write(writer);
+        File savedCalendarFile = new File("src/savedCalendar.json");
+        try (Writer writer = new FileWriter(savedCalendarFile, false)) {
+            objectsToStore.write(writer);
+        } catch (IOException ignored) {
+
+        }
+
 
 
 

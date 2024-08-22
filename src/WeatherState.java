@@ -1,7 +1,6 @@
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class WeatherState {
@@ -62,10 +61,10 @@ public class WeatherState {
 
         }
 
-        String precipChance = Double.toString(precipitationProbability *100);
+
 
         String precipitation ="";
-        Double precipitationIntensity = 0.0;
+        double precipitationIntensity = 0.0;
 
         if (rainIntensity > 0){
             precipitation = "rain";
