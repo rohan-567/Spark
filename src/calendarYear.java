@@ -94,10 +94,10 @@ public class calendarYear {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String dateString = simpleDateFormat.format(calendar.getTime());
 
-        File savedCalendarFile = new File("/Users/rohan/IdeaProjects/Spark_POC/src/savedCalendar.json");
+        File savedCalendarFile = new File("src/savedCalendar.json");
 
-        String filePath = "/Users/rohan/IdeaProjects/Spark_POC/src/savedCalendar.json";
-        String content = new String(Files.readAllBytes(Paths.get(filePath)));
+
+        String content = Main.getDataFromJSON("savedCalendar.json");
         JSONObject objectsToStore = new JSONObject();
 
 
@@ -130,8 +130,11 @@ public class calendarYear {
     public void loadEvents() throws IOException, ParseException {
 
 
-        String filePath = "/Users/rohan/IdeaProjects/Spark_POC/src/savedCalendar.json";
-        String content = new String(Files.readAllBytes(Paths.get(filePath)));
+
+        String content = Main.getDataFromJSON("savedCalendar.json");
+
+
+
 
         if (content.isEmpty()){
             return;
@@ -174,8 +177,8 @@ public class calendarYear {
 
     public void removeOutdatedEvents() throws IOException, ParseException {
 
-        String filePath = "/Users/rohan/IdeaProjects/Spark_POC/src/savedCalendar.json";
-        String content = new String(Files.readAllBytes(Paths.get(filePath)));
+
+        String content = Main.getDataFromJSON("savedCalendar.json");
 
         if (content.isEmpty()){
             return;

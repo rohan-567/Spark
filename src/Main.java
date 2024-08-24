@@ -1,10 +1,4 @@
 import java.io.*;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -14,17 +8,17 @@ import java.util.*;
 import org.json.*;
 
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
-
-
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ParseException {
 
-        WebRequest Request = new WebRequest();
         calendarYear year = new calendarYear();
+        Scanner sc = new Scanner(System.in);
+
+        WebRequest Request = new WebRequest();
+
         WeatherState weatherState = new WeatherState(new JSONObject(Request.getRealtimeWeather()));
 
-        Scanner sc = new Scanner(System.in);
+
 
         System.out.println("Launch App? Y/N");
         String answer = sc.next();
@@ -73,6 +67,15 @@ public class Main {
 
         }
     }
+
+    public static String getDataFromJSON(String filename) throws IOException {
+        InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(filename);
+        assert inputStream != null;
+        return new String(inputStream.readAllBytes());
+    }
+
+
+
 }
 
 
