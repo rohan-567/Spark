@@ -1,16 +1,14 @@
 
+
+
+import main.java.calendarDay;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.*;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.Year;
 import java.util.*;
 
@@ -33,7 +31,7 @@ public class calendarYear {
         }
         return daysWithEvents;
 
-    }  //Returns a List of calendarDay's that have one or more events
+    }  //Returns a List of main.java.calendarDay's that have one or more events
 
 
     public calendarYear() throws IOException, ParseException { //Constructs an array of calendarDays which also takes leap years into consideration
@@ -67,9 +65,31 @@ public class calendarYear {
         return gregorianCalendar;
     } //creates an array of Strings that represent year, month and day which then get parsed into the calendar
 
+    public boolean isValidDate(String date){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        sdf.setLenient(false);
+        try {
+            Date dates =sdf.parse(date);
+            if (dates.before(new Date())){
+                return false;
+            }
+            else{
+                return true;
+            }
+
+
+
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
 
 
     public void addEvent(GregorianCalendar eventDay, String eventName) throws IOException {
+
+
 
         storeEvents(eventDay,eventName);
 
@@ -94,10 +114,10 @@ public class calendarYear {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         String dateString = simpleDateFormat.format(calendar.getTime());
 
-        File savedCalendarFile = new File("src/savedCalendar.json");
+        File savedCalendarFile = ApplicationFilesHandler.savedCalendar;
 
 
-        String content = Main.getDataFromJSON("savedCalendar.json");
+        String content = ApplicationFilesHandler.getDataFromJSON("calendar").toString();
         JSONObject objectsToStore = new JSONObject();
 
 
@@ -131,7 +151,7 @@ public class calendarYear {
 
 
 
-        String content = Main.getDataFromJSON("savedCalendar.json");
+        String content = ApplicationFilesHandler.getDataFromJSON("calendar").toString();
 
 
 
@@ -178,7 +198,7 @@ public class calendarYear {
     public void removeOutdatedEvents() throws IOException, ParseException {
 
 
-        String content = Main.getDataFromJSON("savedCalendar.json");
+        String content = ApplicationFilesHandler.getDataFromJSON("calendar").toString();
 
         if (content.isEmpty()){
             return;
@@ -190,7 +210,6 @@ public class calendarYear {
 
 
         Iterator<String> keys = objectsToStore.keys();
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         List<String> keysToRemove = new ArrayList<>();
 

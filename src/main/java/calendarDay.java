@@ -1,3 +1,5 @@
+package main.java;
+
 import java.time.Month;
 import java.time.MonthDay;
 import java.util.Calendar;
@@ -9,11 +11,11 @@ public class calendarDay {
 
 
 
-    int month;
+    public int month;
 
-    int day;
+    public int day;
 
-    List<String> events;
+    public List<String> events;
 
     int dayOfYear;
 

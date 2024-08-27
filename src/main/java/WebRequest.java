@@ -1,3 +1,6 @@
+
+
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,13 +15,24 @@ import java.net.URLEncoder;
 
 public class WebRequest {
 
-    private final String weatherKey = "&apikey=ClwhuEl1QAvRGyVnOFd1dH63ixsvRisX";
-    private final String locationKey = "a0b5f058d24b41d3b58d563515c32815";
+    private   String weatherKey;
+    private String locationKey;
+
+    public WebRequest() throws IOException {
 
 
+        this.weatherKey = ApplicationFilesHandler.getDataFromJSON("api").getString("weatherKey");
+        this.locationKey = ApplicationFilesHandler.getDataFromJSON("api").getString("locationKey");
 
+    }
 
+    public String getLocationKey() {
+        return locationKey;
+    }
 
+    public WebRequest(String het){
+
+    }
 
     public String makeRequest(String Address) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
@@ -33,7 +47,13 @@ public class WebRequest {
     } //Makes an HTTP Request and expects a JSON format answer
 
     public String getLocation() throws IOException, InterruptedException{
-        return makeRequest("https://api.ipgeolocation.io/ipgeo?apiKey=%s&output=json".formatted(locationKey));
+        return makeRequest("https://api.ipgeolocation.io/ipgeo?apiKey=%s&output=json".formatted(ApplicationFilesHandler.getDataFromJSON("api").getString("locationKey")));
+
+
+
+    }
+    public String getLocation(String key) throws IOException, InterruptedException{
+        return makeRequest("https://api.ipgeolocation.io/ipgeo?apiKey=%s&output=json".formatted(key));
 
 
 
@@ -45,9 +65,10 @@ public class WebRequest {
         String city = location.getString("city");
         city = city.substring(0,1).toLowerCase() + city.substring(1);
 
-        return makeRequest("https://api.tomorrow.io/v4/weather/realtime?location=%s&%s".formatted(city,weatherKey));
+        return makeRequest("https://api.tomorrow.io/v4/weather/realtime?location=%s&apikey=%s".formatted(city,weatherKey));
 
     }
+
 
 
 
@@ -55,13 +76,12 @@ public class WebRequest {
         JSONObject location = new JSONObject(getLocation());
         Double latitude = location.getDouble("latitude");
         Double longitude = location.getDouble("longitude");
-        int radius = 500;
 
         String query = String.format("""
             [out:json];
             (
-              node["amenity"="cafe"](around:500,%.4f,%.4f);
-              node["shop"="bakery"](around:500,%.4f,%.4f);
+              node["amenity"="cafe"](around:5,%.4f,%.4f);
+              node["shop"="bakery"](around:5,%.4f,%.4f);
             );
             out;
             """,latitude,longitude,latitude,longitude);
