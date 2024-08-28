@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, ParseException, URISyntaxException {
 
-        if (System.console() == null) {
+        if (System.console() == null  && System.getProperty("os.name").toLowerCase().contains("mac") ) {
             String filename  = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getName();
 
             File file = new File(Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent().toString(), filename);
@@ -25,6 +25,22 @@ public class Main {
 
             processBuilder.start();
         }
+
+        if (System.console() == null && System.getProperty("os.name").toLowerCase().contains("windows") ) {
+
+                String filename  = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getName();
+
+                File file = new File(Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath()).getParent().toString(), filename);
+                String filepath = file.getAbsolutePath();
+
+                ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/c", "start", "cmd", "/k", "java -jar " + filepath);
+
+                processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+
+                processBuilder.start();}
+
+
+
 
         else{
             System.out.println("Welcome to Spark!");
